@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://turftrack:turftrack@db:5432/weatherdb"
+  db:
+    image: postgres:17.4
+    restart: always
+    environment:
+      POSTGRES_USER: turftrack
+      POSTGRES_PASSWORD: turftrack
+      POSTGRES_DB: weatherdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
