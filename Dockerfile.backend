@@ -1,0 +1,28 @@
+FROM python:3.12-slim-bookworm
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    build-essential curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Download the latest installer, install it, then remove it
+ADD https://astral.sh/uv/install.sh /install.sh
+RUN chmod -R 755 /install.sh && /install.sh && rm /install.sh
+
+# Set up the UV environment path correctly
+ENV PATH="/root/.local/bin:${PATH}"
+
+# Copy the backend folder contents into /app
+WORKDIR /app
+COPY backend/ .
+
+# Now we are in /app which should contain pyproject.toml and src/
+RUN uv sync
+
+# Update PATH to point to the uv-managed virtual environment
+ENV PATH="/app/.venv/bin:${PATH}"
+
+# Expose the port (8080 in this case)
+EXPOSE 8080
+
+# Start your FastAPI app using uv from /root/.local/bin   
+CMD ["uvicorn", "src.main:app", "--log-level", "info", "--host", "0.0.0.0", "--port", "8080"]
