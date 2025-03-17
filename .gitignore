@@ -91,3 +91,7 @@ docker-compose.override.yml
 
 # postgres data
 /postgres_data
+/db_docker
+
+.cache.sqlite
+last_fetch_time.txt

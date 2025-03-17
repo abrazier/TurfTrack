@@ -1,8 +1,17 @@
-import os
+from pydantic_settings import BaseSettings
+from typing import Optional
 
 
-class Config:
-    DEBUG = True
-    DATABASE_URL = os.getenv(
-        "DATABASE_URL", "postgresql://postgres:password@localhost:5432/weatherdb"
-    )
+class Settings(BaseSettings):
+    DEBUG: bool
+    DATABASE_URL: str
+    OPENWEATHER_API_KEY: Optional[str] = None
+    DEFAULT_LATITUDE: float
+    DEFAULT_LONGITUDE: float
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+
+settings = Settings()
