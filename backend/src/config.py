@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     OPENWEATHER_API_KEY: Optional[str] = None
     DEFAULT_LATITUDE: float
     DEFAULT_LONGITUDE: float
+    LOCAL_TIMEZONE: str
 
     class Config:
         env_file = ".env"
